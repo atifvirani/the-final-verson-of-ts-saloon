@@ -22,7 +22,6 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
   }, []);
 
   const addToCart = (svc: Service) => {
-    // Pick first staff as default or show picker
     const defaultStaff = staff[0];
     if (defaultStaff) {
       setCart([...cart, { service: svc, staff: defaultStaff }]);
@@ -56,7 +55,7 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
       })),
       subtotal: cart.reduce((acc, item) => acc + item.service.price, 0),
       discount,
-      tax: 0,
+      tax: 0, // Tax logic can be enhanced if needed
       total: calculateTotal(),
       paymentMode,
       isClinic: false
@@ -64,7 +63,6 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
 
     await db.add('INVOICES', invoice);
     
-    // Update customer lifetime value
     if (selectedCustomer) {
       await db.update<Customer>('CUSTOMERS', selectedCustomer.id, {
         visitCount: (selectedCustomer.visitCount || 0) + 1,
@@ -87,11 +85,11 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
             <button
               key={svc.id}
               onClick={() => addToCart(svc)}
-              className="bg-[#111] border border-white/5 hover:border-amber-500/50 p-6 rounded-2xl text-left transition-all group"
+              className="bg-[#111] border border-white/5 hover:border-gold hover:bg-gold/5 p-6 rounded-2xl text-left transition-all group"
             >
               <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">{svc.category}</div>
-              <div className="text-gray-100 font-bold group-hover:text-amber-500 transition-colors">{svc.name}</div>
-              <div className="text-xl font-bold text-gray-400 mt-2">${svc.price}</div>
+              <div className="text-gray-100 font-bold group-hover:text-gold transition-colors">{svc.name}</div>
+              <div className="text-xl font-bold text-gray-400 mt-2">₹{svc.price}</div>
             </button>
           ))}
         </div>
@@ -108,7 +106,7 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
                 const c = customers.find(cu => cu.id === e.target.value);
                 setSelectedCustomer(c || null);
               }}
-              className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 outline-none focus:border-amber-500"
+              className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 outline-none focus:border-gold"
             >
               <option value="">Select Customer (CRM)</option>
               {customers.map(c => <option key={c.id} value={c.id}>{c.name} ({c.phone})</option>)}
@@ -133,7 +131,7 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="text-sm font-bold text-amber-500">${item.service.price}</div>
+                  <div className="text-sm font-bold text-gold">₹{item.service.price}</div>
                   <button onClick={() => removeFromCart(idx)} className="text-gray-600 hover:text-red-500">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                   </button>
@@ -146,7 +144,7 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
         <div className="p-6 bg-black/60 border-t border-white/5 space-y-4">
           <div className="flex justify-between text-sm text-gray-400">
             <span>Subtotal</span>
-            <span>${cart.reduce((acc, item) => acc + item.service.price, 0)}</span>
+            <span>₹{cart.reduce((acc, item) => acc + item.service.price, 0)}</span>
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-400">Discount</span>
@@ -159,19 +157,25 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
           </div>
           <div className="pt-4 flex justify-between items-end">
             <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest">Total Payable</div>
-            <div className="text-3xl font-bold text-white luxury-font">${calculateTotal()}</div>
+            <div className="text-3xl font-bold text-white luxury-font">₹{calculateTotal()}</div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 mt-6">
+          <div className="grid grid-cols-3 gap-2 mt-6">
             <button 
               onClick={() => setPaymentMode(PaymentMode.UPI)}
-              className={`py-3 rounded-xl text-xs font-bold border transition-all ${paymentMode === PaymentMode.UPI ? 'bg-blue-600 border-blue-500 text-white' : 'bg-white/5 border-white/10 text-gray-400'}`}
+              className={`py-3 rounded-xl text-[10px] font-bold border transition-all ${paymentMode === PaymentMode.UPI ? 'bg-blue-600 border-blue-500 text-white' : 'bg-white/5 border-white/10 text-gray-400'}`}
             >
-              UPI / DIGITAL
+              UPI / SCAN
+            </button>
+            <button 
+              onClick={() => setPaymentMode(PaymentMode.CARD)}
+              className={`py-3 rounded-xl text-[10px] font-bold border transition-all ${paymentMode === PaymentMode.CARD ? 'bg-purple-600 border-purple-500 text-white' : 'bg-white/5 border-white/10 text-gray-400'}`}
+            >
+              CARD
             </button>
             <button 
               onClick={() => setPaymentMode(PaymentMode.CASH)}
-              className={`py-3 rounded-xl text-xs font-bold border transition-all ${paymentMode === PaymentMode.CASH ? 'bg-amber-600 border-amber-500 text-white' : 'bg-white/5 border-white/10 text-gray-400'}`}
+              className={`py-3 rounded-xl text-[10px] font-bold border transition-all ${paymentMode === PaymentMode.CASH ? 'bg-gold border-gold text-black' : 'bg-white/5 border-white/10 text-gray-400'}`}
             >
               CASH
             </button>
@@ -182,7 +186,7 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
             onClick={finalizeBill}
             className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-30 text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-emerald-900/20"
           >
-            GENERATE & PRINT INVOICE
+            GENERATE INVOICE (GST)
           </button>
         </div>
       </div>

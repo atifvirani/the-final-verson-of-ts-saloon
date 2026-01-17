@@ -59,15 +59,15 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen flex flex-col items-center justify-center bg-[#0a0a0a] text-white">
-        <div className="luxury-font text-4xl mb-4 animate-pulse">ELYSIAN</div>
-        <div className="text-sm tracking-widest text-gray-400 uppercase">Initializing Salon OS...</div>
+      <div className="h-screen w-screen flex flex-col items-center justify-center bg-[#1a1a1a] text-white">
+        <div className="luxury-font text-4xl mb-4 animate-pulse text-gold">TS SALON</div>
+        <div className="text-sm tracking-widest text-gray-400 uppercase">Aesthetics & Clinic OS</div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-[#0a0a0a] overflow-hidden">
+    <div className="flex h-screen bg-[#1a1a1a] overflow-hidden">
       {/* Fixed Sidebar */}
       <Sidebar 
         currentView={currentView} 
@@ -79,7 +79,7 @@ const App: React.FC = () => {
       {/* Main Content Area */}
       <main className={`flex-1 flex flex-col min-w-0 bg-[#0f0f0f] border-l border-white/5 transition-all duration-300`}>
         {/* Global Header */}
-        <header className="h-16 border-b border-white/5 px-8 flex items-center justify-between bg-[#0a0a0a]/80 backdrop-blur-md sticky top-0 z-10">
+        <header className="h-16 border-b border-white/5 px-8 flex items-center justify-between bg-[#1a1a1a]/80 backdrop-blur-md sticky top-0 z-10">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -93,11 +93,11 @@ const App: React.FC = () => {
           </div>
           <div className="flex items-center gap-6">
             <div className="text-right">
-              <div className="text-xs text-gray-500 uppercase tracking-widest font-bold">Current Operator</div>
-              <div className="text-sm text-gray-200">System Admin</div>
+              <div className="text-xs text-gray-500 uppercase tracking-widest font-bold">Odisha, IN</div>
+              <div className="text-sm text-gray-200">TS Admin</div>
             </div>
-            <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-amber-500 to-amber-700 flex items-center justify-center text-white font-bold shadow-lg shadow-amber-900/20">
-              A
+            <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-gold to-yellow-700 flex items-center justify-center text-black font-bold shadow-lg shadow-amber-900/20">
+              TS
             </div>
           </div>
         </header>

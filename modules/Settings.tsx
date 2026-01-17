@@ -39,7 +39,7 @@ const Settings: React.FC = () => {
                 type="text" 
                 value={settings.salonName}
                 onChange={e => setSettings({...settings, salonName: e.target.value})}
-                className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white focus:border-amber-500 outline-none transition-all"
+                className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white focus:border-gold outline-none transition-all"
               />
             </div>
             <div>
@@ -48,22 +48,22 @@ const Settings: React.FC = () => {
                 type="text" 
                 value={settings.currency}
                 onChange={e => setSettings({...settings, currency: e.target.value})}
-                className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white focus:border-amber-500 outline-none transition-all"
+                className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white focus:border-gold outline-none transition-all"
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-500 uppercase font-black tracking-widest mb-3">Default Tax (%)</label>
+              <label className="block text-xs text-gray-500 uppercase font-black tracking-widest mb-3">Default Tax / GST (%)</label>
               <input 
                 type="number" 
                 value={settings.taxRate}
                 onChange={e => setSettings({...settings, taxRate: parseFloat(e.target.value)})}
-                className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white focus:border-amber-500 outline-none transition-all"
+                className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white focus:border-gold outline-none transition-all"
               />
             </div>
             <div>
               <label className="block text-xs text-gray-500 uppercase font-black tracking-widest mb-3">Auto-Backup Sync</label>
               <div className="flex items-center gap-4 py-4">
-                <div className="w-12 h-6 rounded-full bg-amber-600 relative cursor-pointer">
+                <div className="w-12 h-6 rounded-full bg-gold relative cursor-pointer">
                   <div className="absolute right-1 top-1 w-4 h-4 rounded-full bg-white"></div>
                 </div>
                 <span className="text-xs text-gray-400">Enabled (Every 15 mins)</span>
@@ -77,7 +77,7 @@ const Settings: React.FC = () => {
               value={settings.whatsappTemplate}
               onChange={e => setSettings({...settings, whatsappTemplate: e.target.value})}
               rows={4}
-              className="w-full bg-black border border-white/10 rounded-3xl px-5 py-4 text-white focus:border-amber-500 outline-none transition-all resize-none"
+              className="w-full bg-black border border-white/10 rounded-3xl px-5 py-4 text-white focus:border-gold outline-none transition-all resize-none"
             />
             <p className="text-[10px] text-gray-600 mt-2">Available Variables: {'{name}, {invoiceId}, {total}, {date}'}</p>
           </div>
@@ -85,7 +85,7 @@ const Settings: React.FC = () => {
           <div className="pt-6 border-t border-white/5 flex justify-end">
             <button 
               onClick={handleSave}
-              className="bg-amber-600 hover:bg-amber-500 text-white font-bold py-4 px-10 rounded-2xl transition-all shadow-xl shadow-amber-900/10"
+              className="bg-gold hover:bg-yellow-600 text-black font-bold py-4 px-10 rounded-2xl transition-all shadow-xl shadow-amber-900/10"
             >
               Update Global Settings
             </button>

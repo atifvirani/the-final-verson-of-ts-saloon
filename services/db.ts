@@ -1,20 +1,27 @@
 
 /**
- * DB Service: All data access is isolated and asynchronous
- * to maintain compatibility with future real databases.
+ * DB Service: All data access is isolated and asynchronous.
+ * Implements STRICT separation between Salon and Clinic data.
  */
 
 const KEYS = {
-  SERVICES: 'salon_services',
-  STAFF: 'salon_staff',
-  CUSTOMERS: 'salon_customers',
-  INVOICES: 'salon_invoices',
-  CHAIRS: 'salon_chairs',
-  FORMULAS: 'salon_formulas',
-  SETTINGS: 'salon_settings',
-  CLINIC_CUSTOMERS: 'clinic_customers',
-  CLINIC_INVOICES: 'clinic_invoices',
-  LOGS: 'salon_audit_logs'
+  // --- SALON SIDE DATA ---
+  SERVICES: 'ts_salon_services',
+  STAFF: 'ts_staff_members',
+  CUSTOMERS: 'ts_salon_clients',
+  INVOICES: 'ts_salon_invoices',
+  CHAIRS: 'ts_salon_chairs',
+  FORMULAS: 'ts_salon_formulas',
+  
+  // --- CLINIC SIDE DATA (Strictly Separate) ---
+  CLINIC_CUSTOMERS: 'ts_clinic_clients_secure',
+  CLINIC_INVOICES: 'ts_clinic_invoices',
+  CLINIC_RECORDS: 'ts_clinic_records',
+  CLINIC_CONSENTS: 'ts_clinic_consents',
+  
+  // --- SHARED RESOURCES ---
+  SETTINGS: 'ts_system_settings',
+  LOGS: 'ts_audit_logs'
 };
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -71,10 +78,10 @@ export const db = {
   async getSettings(): Promise<any> {
     const data = localStorage.getItem(KEYS.SETTINGS);
     return data ? JSON.parse(data) : {
-      salonName: 'Elysian Luxury Salon',
-      currency: '$',
-      taxRate: 5,
-      whatsappTemplate: 'Hello {name}, your invoice {invoiceId} for {total} is ready.'
+      salonName: 'TS Salon & Aesthetics',
+      currency: '₹',
+      taxRate: 18, // GST Default
+      whatsappTemplate: 'Namaste {name}, thank you for visiting TS Salon. Your bill #{invoiceId} for {total} is ready.'
     };
   },
 

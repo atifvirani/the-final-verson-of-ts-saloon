@@ -26,6 +26,7 @@ export enum ChairStatus {
 export enum PaymentMode {
   CASH = 'cash',
   UPI = 'upi',
+  CARD = 'card',
   SPLIT = 'split'
 }
 

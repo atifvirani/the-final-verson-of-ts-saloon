@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
       invoices.forEach(inv => {
         rev += inv.total;
         if (inv.paymentMode === PaymentMode.CASH) cash += inv.total;
-        else upi += inv.total;
+        else upi += inv.total; // Group Card + UPI for simple analytics
 
         const dateKey = new Date(inv.date).toLocaleDateString();
         dailyMap[dateKey] = (dailyMap[dateKey] || 0) + inv.total;
@@ -58,10 +58,10 @@ const Dashboard: React.FC = () => {
     fetchData();
   }, []);
 
-  const formatCurr = (val: number) => `$${val.toLocaleString()}`;
+  const formatCurr = (val: number) => `₹${val.toLocaleString()}`;
 
   const cards = [
-    { label: 'Gross Revenue', value: formatCurr(stats.revenue), trend: '+12%', color: 'text-amber-500' },
+    { label: 'Gross Revenue', value: formatCurr(stats.revenue), trend: '+12%', color: 'text-gold' },
     { label: 'Net Profit', value: formatCurr(stats.profit), trend: '+8.5%', color: 'text-emerald-500' },
     { label: 'Staff Commission', value: formatCurr(stats.commission), trend: '-2.1%', color: 'text-blue-500' },
     { label: 'Total Visits', value: stats.count, trend: '+45', color: 'text-purple-500' }
@@ -96,8 +96,8 @@ const Dashboard: React.FC = () => {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorAmt" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#d97706" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#d97706" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#D4AF37" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#222" />
@@ -105,9 +105,9 @@ const Dashboard: React.FC = () => {
                 <YAxis stroke="#444" fontSize={10} />
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '8px' }}
-                  itemStyle={{ color: '#d97706' }}
+                  itemStyle={{ color: '#D4AF37' }}
                 />
-                <Area type="monotone" dataKey="amount" stroke="#d97706" fillOpacity={1} fill="url(#colorAmt)" strokeWidth={3} />
+                <Area type="monotone" dataKey="amount" stroke="#D4AF37" fillOpacity={1} fill="url(#colorAmt)" strokeWidth={3} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -123,14 +123,14 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-amber-500 rounded-full transition-all duration-1000" 
+                  className="h-full bg-gold rounded-full transition-all duration-1000" 
                   style={{ width: `${(stats.cashSplit / stats.revenue) * 100 || 0}%` }}
                 />
               </div>
             </div>
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400">Digital / UPI</span>
+                <span className="text-gray-400">UPI / Card</span>
                 <span className="text-white font-bold">{formatCurr(stats.upiSplit)}</span>
               </div>
               <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
@@ -145,15 +145,15 @@ const Dashboard: React.FC = () => {
               <div className="text-xs text-gray-500 uppercase tracking-widest font-bold mb-4">Quick Insights</div>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-center gap-2 text-gray-300">
-                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-gold"></div>
                   UPI usage up 22% this week
                 </li>
                 <li className="flex items-center gap-2 text-gray-300">
-                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-gold"></div>
                   Peak hours: 4 PM - 8 PM
                 </li>
                 <li className="flex items-center gap-2 text-gray-300">
-                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-gold"></div>
                   Return rate is 68%
                 </li>
               </ul>

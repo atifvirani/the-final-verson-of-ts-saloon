@@ -27,10 +27,10 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen }) 
   ];
 
   return (
-    <aside className={`${isOpen ? 'w-64' : 'w-0'} bg-[#0a0a0a] flex flex-col transition-all duration-300 overflow-hidden`}>
+    <aside className={`${isOpen ? 'w-64' : 'w-0'} bg-[#1a1a1a] flex flex-col transition-all duration-300 overflow-hidden border-r border-white/5`}>
       <div className="p-8 pb-4">
-        <h1 className="luxury-font text-2xl tracking-tighter text-amber-500">ELYSIAN</h1>
-        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 mt-1">Operating System</p>
+        <h1 className="luxury-font text-2xl tracking-tighter text-gold">TS SALON</h1>
+        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 mt-1">Aesthetics & Clinic</p>
       </div>
       
       <nav className="flex-1 overflow-y-auto mt-4 px-4 space-y-1 custom-scrollbar">
@@ -40,11 +40,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen }) 
             onClick={() => onViewChange(item.id)}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all group ${
               currentView === item.id 
-                ? 'bg-amber-600/10 text-amber-500 font-medium' 
+                ? 'bg-gold/10 text-gold font-medium' 
                 : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
-            <svg className={`w-5 h-5 ${currentView === item.id ? 'text-amber-500' : 'text-gray-500 group-hover:text-gray-300'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={`w-5 h-5 ${currentView === item.id ? 'text-gold' : 'text-gray-500 group-hover:text-gray-300'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon}></path>
             </svg>
             <span className="whitespace-nowrap">{item.label}</span>
@@ -55,7 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen }) 
       <div className="p-6 border-t border-white/5">
         <div className="bg-[#111] rounded-xl p-4">
           <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-1">System Version</div>
-          <div className="text-xs text-gray-300 font-mono">v4.0.2-LUXE</div>
+          <div className="text-xs text-gray-300 font-mono">v5.0-INDIA</div>
         </div>
       </div>
     </aside>

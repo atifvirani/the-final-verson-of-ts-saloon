@@ -66,7 +66,7 @@ const StaffManagement: React.FC = () => {
         <h2 className="text-2xl font-bold luxury-font text-white">Staff Roster</h2>
         <button 
           onClick={() => { setEditingStaff({}); setIsModalOpen(true); }}
-          className="bg-amber-600 hover:bg-amber-500 text-white px-6 py-2 rounded-xl text-sm font-bold flex items-center gap-2"
+          className="bg-gold hover:bg-yellow-600 text-black px-6 py-2 rounded-xl text-sm font-bold flex items-center gap-2"
         >
           Add New Staff
         </button>
@@ -74,13 +74,13 @@ const StaffManagement: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {staffList.map(member => (
-          <div key={member.id} className="bg-[#111] border border-white/5 rounded-3xl overflow-hidden group hover:border-amber-500/30 transition-all">
+          <div key={member.id} className="bg-[#111] border border-white/5 rounded-3xl overflow-hidden group hover:border-gold/30 transition-all">
             <div className="p-6 text-center border-b border-white/5">
-              <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-gray-800 to-black border border-white/10 flex items-center justify-center text-2xl font-bold text-gray-500 mb-4 group-hover:text-amber-500 transition-colors">
+              <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-gray-800 to-black border border-white/10 flex items-center justify-center text-2xl font-bold text-gray-500 mb-4 group-hover:text-gold transition-colors">
                 {member.name[0]}
               </div>
               <h3 className="text-lg font-bold text-white">{member.name}</h3>
-              <p className="text-xs text-amber-500 uppercase tracking-widest font-bold mt-1">{member.role}</p>
+              <p className="text-xs text-gold uppercase tracking-widest font-bold mt-1">{member.role}</p>
             </div>
             
             <div className="p-6 space-y-4">
@@ -97,7 +97,7 @@ const StaffManagement: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest">Revenue</div>
-                    <div className="text-sm font-bold text-emerald-500">${staffStats[member.id]?.revenue.toLocaleString() || 0}</div>
+                    <div className="text-sm font-bold text-emerald-500">₹{staffStats[member.id]?.revenue.toLocaleString() || 0}</div>
                   </div>
                   <div>
                     <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest">Services</div>
@@ -138,7 +138,7 @@ const StaffManagement: React.FC = () => {
                   type="text" 
                   value={editingStaff.name || ''}
                   onChange={e => setEditingStaff({...editingStaff, name: e.target.value})}
-                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none"
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none"
                   required
                 />
               </div>
@@ -148,7 +148,7 @@ const StaffManagement: React.FC = () => {
                   type="text" 
                   value={editingStaff.role || ''}
                   onChange={e => setEditingStaff({...editingStaff, role: e.target.value})}
-                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none"
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none"
                   placeholder="e.g. Senior Stylist"
                 />
               </div>
@@ -159,7 +159,7 @@ const StaffManagement: React.FC = () => {
                     type="text" 
                     value={editingStaff.phone || ''}
                     onChange={e => setEditingStaff({...editingStaff, phone: e.target.value})}
-                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none"
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none"
                   />
                 </div>
                 <div>
@@ -168,7 +168,7 @@ const StaffManagement: React.FC = () => {
                     type="number" 
                     value={editingStaff.commission || ''}
                     onChange={e => setEditingStaff({...editingStaff, commission: parseFloat(e.target.value)})}
-                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-amber-500 outline-none"
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none"
                   />
                 </div>
               </div>
@@ -183,7 +183,7 @@ const StaffManagement: React.FC = () => {
                 </button>
                 <button 
                   type="submit"
-                  className="flex-1 bg-amber-600 text-white font-bold py-3 rounded-xl hover:bg-amber-500"
+                  className="flex-1 bg-gold text-black font-bold py-3 rounded-xl hover:bg-yellow-600"
                 >
                   Save Profile
                 </button>

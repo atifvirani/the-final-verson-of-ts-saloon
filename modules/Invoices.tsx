@@ -30,12 +30,10 @@ const Invoices: React.FC = () => {
   };
 
   const handlePrint = (invoice: Invoice) => {
-    // In a real app, this would generate a PDF
     alert(`Printing Invoice #${invoice.id}...`);
   };
 
   const handleWhatsApp = (invoice: Invoice) => {
-    // In a real app, this would open WhatsApp Web
     alert(`Sending Invoice #${invoice.id} to ${invoice.customerPhone} via WhatsApp...`);
   };
 
@@ -49,7 +47,7 @@ const Invoices: React.FC = () => {
             placeholder="Search invoice #, name or phone..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            className="bg-[#111] border border-white/10 rounded-2xl px-10 py-3 text-sm text-gray-200 w-80 focus:border-amber-500 outline-none transition-all"
+            className="bg-[#111] border border-white/10 rounded-2xl px-10 py-3 text-sm text-gray-200 w-80 focus:border-gold outline-none transition-all"
           />
           <svg className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
@@ -83,7 +81,7 @@ const Invoices: React.FC = () => {
                   {inv.services.length} items
                 </td>
                 <td className="px-6 py-4 text-right font-bold text-emerald-500 text-lg">
-                  ${inv.total.toLocaleString()}
+                  ₹{inv.total.toLocaleString()}
                 </td>
                 <td className="px-6 py-4 text-center">
                   <span className="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-500">
@@ -93,7 +91,7 @@ const Invoices: React.FC = () => {
                 <td className="px-6 py-4 text-right">
                   <button 
                     onClick={() => setSelectedInvoice(inv)}
-                    className="text-amber-500 hover:text-amber-400 font-bold text-xs uppercase tracking-wider"
+                    className="text-gold hover:text-yellow-400 font-bold text-xs uppercase tracking-wider"
                   >
                     View Details
                   </button>
@@ -154,7 +152,7 @@ const Invoices: React.FC = () => {
                       <tr key={i}>
                         <td className="px-4 py-3 text-white font-medium">{svc.name}</td>
                         <td className="px-4 py-3 text-gray-400">{svc.staffName}</td>
-                        <td className="px-4 py-3 text-right text-white">${svc.price}</td>
+                        <td className="px-4 py-3 text-right text-white">₹{svc.price}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -165,15 +163,15 @@ const Invoices: React.FC = () => {
                 <div className="w-48 space-y-2">
                   <div className="flex justify-between text-sm text-gray-400">
                     <span>Subtotal</span>
-                    <span>${selectedInvoice.subtotal}</span>
+                    <span>₹{selectedInvoice.subtotal}</span>
                   </div>
                   <div className="flex justify-between text-sm text-gray-400">
                     <span>Discount</span>
-                    <span className="text-red-400">-${selectedInvoice.discount}</span>
+                    <span className="text-red-400">-₹{selectedInvoice.discount}</span>
                   </div>
                   <div className="flex justify-between text-lg font-bold text-white pt-2 border-t border-white/10">
                     <span>Total</span>
-                    <span>${selectedInvoice.total}</span>
+                    <span>₹{selectedInvoice.total}</span>
                   </div>
                 </div>
               </div>

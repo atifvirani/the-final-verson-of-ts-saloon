@@ -79,7 +79,7 @@ const Reports: React.FC = () => {
     });
   };
 
-  const COLORS = ['#d97706', '#059669', '#3b82f6', '#8b5cf6', '#ec4899'];
+  const COLORS = ['#D4AF37', '#059669', '#3b82f6', '#8b5cf6', '#ec4899'];
 
   return (
     <div className="space-y-8">
@@ -97,15 +97,15 @@ const Reports: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-[#111] border border-white/5 rounded-2xl p-6">
           <div className="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Total Net Profit</div>
-          <div className="text-3xl font-bold text-emerald-500 luxury-font">${reportData.totalProfit.toLocaleString()}</div>
+          <div className="text-3xl font-bold text-emerald-500 luxury-font">₹{reportData.totalProfit.toLocaleString()}</div>
         </div>
         <div className="bg-[#111] border border-white/5 rounded-2xl p-6">
           <div className="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Staff Payouts</div>
-          <div className="text-3xl font-bold text-blue-500 luxury-font">${reportData.totalCommission.toLocaleString()}</div>
+          <div className="text-3xl font-bold text-blue-500 luxury-font">₹{reportData.totalCommission.toLocaleString()}</div>
         </div>
         <div className="bg-[#111] border border-white/5 rounded-2xl p-6">
           <div className="text-xs text-gray-500 uppercase font-black tracking-widest mb-1">Total Revenue</div>
-          <div className="text-3xl font-bold text-amber-500 luxury-font">${reportData.totalRevenue.toLocaleString()}</div>
+          <div className="text-3xl font-bold text-gold luxury-font">₹{reportData.totalRevenue.toLocaleString()}</div>
         </div>
       </div>
 
@@ -121,7 +121,7 @@ const Reports: React.FC = () => {
                 cursor={{fill: '#222'}}
                 contentStyle={{ backgroundColor: '#000', border: '1px solid #333', borderRadius: '8px' }}
               />
-              <Bar dataKey="amount" fill="#d97706" radius={[4, 4, 0, 0]} barSize={40} />
+              <Bar dataKey="amount" fill="#D4AF37" radius={[4, 4, 0, 0]} barSize={40} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -163,7 +163,7 @@ const Reports: React.FC = () => {
         <div className="space-y-4">
           {reportData.topServices.map((svc, i) => (
             <div key={i} className="flex items-center gap-4">
-              <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-bold text-amber-500">
+              <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-bold text-gold">
                 {i + 1}
               </div>
               <div className="flex-1">
@@ -173,7 +173,7 @@ const Reports: React.FC = () => {
                 </div>
                 <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-amber-600 rounded-full"
+                    className="h-full bg-gold rounded-full"
                     style={{ width: `${(svc.count / (reportData.topServices[0]?.count || 1)) * 100}%` }}
                   ></div>
                 </div>
