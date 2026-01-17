@@ -38,6 +38,12 @@ const TabletMode: React.FC = () => {
     }
   };
 
+  const exitTabletMode = () => {
+    if (confirm("Exit Tablet Mode and return to Admin?")) {
+      window.location.reload(); 
+    }
+  };
+
   const handleAddService = async (serviceId: string) => {
     if (!selectedChair) return;
     
@@ -65,7 +71,15 @@ const TabletMode: React.FC = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="h-full flex flex-col items-center justify-center bg-[#111] p-8">
+      <div className="h-full flex flex-col items-center justify-center bg-[#111] p-8 relative">
+        <button 
+          onClick={exitTabletMode} 
+          className="absolute top-6 right-6 opacity-30 hover:opacity-100 text-gray-500 hover:text-red-500 transition-all p-2"
+          title="Exit to Admin"
+        >
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        </button>
+
         <h1 className="text-4xl font-bold luxury-font text-gold mb-8">STYLIST ACCESS</h1>
         <div className="bg-black border border-white/10 p-8 rounded-3xl shadow-2xl w-full max-w-sm">
           <input 
@@ -183,10 +197,18 @@ const TabletMode: React.FC = () => {
   }
 
   return (
-    <div className="h-full p-8 bg-[#111]">
+    <div className="h-full p-8 bg-[#111] relative">
+      <button 
+        onClick={exitTabletMode} 
+        className="absolute top-8 right-8 opacity-30 hover:opacity-100 text-gray-500 hover:text-red-500 transition-all p-2"
+        title="Exit to Admin"
+      >
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+      </button>
+
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold luxury-font text-white">Salon Floor Map</h1>
-        <button onClick={() => setIsAuthenticated(false)} className="bg-white/5 px-6 py-2 rounded-xl text-xs font-bold text-gray-400">LOGOUT</button>
+        <button onClick={() => setIsAuthenticated(false)} className="bg-white/5 px-6 py-2 rounded-xl text-xs font-bold text-gray-400 mr-12">LOGOUT</button>
       </div>
       
       <div className="grid grid-cols-4 gap-6 h-[calc(100vh-160px)]">
