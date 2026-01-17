@@ -15,6 +15,7 @@ import FormulaVault from './modules/FormulaVault';
 import Settings from './modules/Settings';
 import Developer from './modules/Developer';
 import TabletMode from './modules/TabletMode';
+import Inventory from './modules/Inventory'; // ✅ Import Inventory
 import { db } from './services/db';
 
 const App: React.FC = () => {
@@ -46,6 +47,7 @@ const App: React.FC = () => {
       case AppView.POS: return <POS />;
       case AppView.QUICK_BILLING: return <POS quickMode />;
       case AppView.SERVICES: return <Services />;
+      case AppView.INVENTORY: return <Inventory />; // ✅ Route for Inventory
       case AppView.INVOICES: return <Invoices />;
       case AppView.CUSTOMERS: return <CRM />;
       case AppView.REPORTS: return <Reports />;

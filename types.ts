@@ -5,6 +5,7 @@ export enum AppView {
   POS = 'pos',
   QUICK_BILLING = 'quick-billing',
   SERVICES = 'services',
+  INVENTORY = 'inventory',
   INVOICES = 'invoices',
   CUSTOMERS = 'customers',
   PROFIT = 'profit',
@@ -127,4 +128,5 @@ export interface InventoryItem {
   minLevel: number;
   price: number;
   category: string;
+  active?: boolean; // Soft delete support
 }
