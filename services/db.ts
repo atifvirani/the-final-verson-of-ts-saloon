@@ -4,7 +4,7 @@
  * Implements STRICT separation between Salon and Clinic data.
  */
 
-import { Customer, Invoice, Service, Staff, Formula, Expense } from '../types';
+import { Customer, Invoice, Service, Staff, Formula, Expense, InventoryItem } from '../types';
 
 // Map aliases for compatibility
 type Client = Customer;
@@ -60,7 +60,7 @@ export const db = {
     const data = localStorage.getItem(storageKey);
     let list = data ? JSON.parse(data) : [];
     
-    // Auto-filter inactive items for specific modules
+    // Auto-filter inactive items for specific modules to keep UI clean
     if (['SERVICES', 'STAFF'].includes(key)) {
         list = list.filter((item: any) => item.active !== false);
     }
@@ -82,17 +82,12 @@ export const db = {
     const newItem = { 
       ...item, 
       id: item.id || uuidv4(), 
-      active: true, // Default active state
+      active: true, // ✅ Default active state for Soft Delete support
       createdAt: new Date().toISOString() 
     };
     list.unshift(newItem); 
     localStorage.setItem(storageKey, JSON.stringify(list));
     
-    // Inventory Logic: Deduct stock when Invoice is generated
-    if (key === 'INVOICES') {
-        await db.handleInventoryDeduction(newItem);
-    }
-
     await db.log('ADD', key as string, newItem.id);
   },
 
@@ -110,20 +105,28 @@ export const db = {
     }
   },
 
-  // 🔴 SOFT DELETE IMPLEMENTATION
+  // 🔴 SOFT DELETE IMPLEMENTATION (AUDIT FIX)
   delete: async (key: keyof typeof LEGACY_KEYS, id: string | number): Promise<void> => {
     await delay(50);
     const storageKey = LEGACY_KEYS[key] || key;
     
-    if (['SERVICES', 'STAFF'].includes(key)) {
-        // Soft Delete
-        await db.update(key, id, { active: false });
+    // Read raw data to ensure we don't work on a filtered list
+    const data = localStorage.getItem(storageKey);
+    let list: any[] = data ? JSON.parse(data) : [];
+
+    const index = list.findIndex(i => i.id == id);
+    if (index === -1) return;
+
+    // Soft Delete: Mark as inactive instead of removing
+    // We check for 'active' property existence OR strictly enforce it for SERVICES/STAFF
+    const item = list[index];
+    if (item.hasOwnProperty('active') || ['SERVICES', 'STAFF'].includes(key)) {
+        list[index] = { ...item, active: false };
+        localStorage.setItem(storageKey, JSON.stringify(list));
         await db.log('SOFT_DELETE', key as string, id);
     } else {
-        // Hard Delete (for other items like logs or drafts)
-        const data = localStorage.getItem(storageKey);
-        let list: any[] = data ? JSON.parse(data) : [];
-        list = list.filter(i => i.id != id);
+        // Fallback: Hard Delete (for items like logs, temp drafts)
+        list.splice(index, 1);
         localStorage.setItem(storageKey, JSON.stringify(list));
         await db.log('DELETE', key as string, id);
     }
@@ -134,14 +137,6 @@ export const db = {
     const storageKey = LEGACY_KEYS[key] || key;
     localStorage.setItem(storageKey, JSON.stringify(items));
     await db.log('SAVE', key as string, 'bulk');
-  },
-
-  // --- LOGIC HELPERS ---
-
-  handleInventoryDeduction: async (invoice: Invoice) => {
-    // Placeholder for robust inventory logic
-    // In a real app, we would map services to products and deduct
-    await db.log('INVENTORY_ADJUST', 'INVENTORY', invoice.id);
   },
 
   // --- NAMESPACED ACCESSORS ---
@@ -164,6 +159,7 @@ export const db = {
       const data = localStorage.getItem(STORAGE_KEYS.EXPENSES);
       return data ? JSON.parse(data) : [];
     },
+    getInventory: () => db.get<InventoryItem>('INVENTORY'),
   },
 
   getSettings: async (): Promise<any> => {

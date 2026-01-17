@@ -32,7 +32,8 @@ const StaffManagement: React.FC = () => {
       });
     });
 
-    setStaffList(staff);
+    // Only show active staff
+    setStaffList(staff.filter(x => x.active !== false));
     setStaffStats(stats);
   };
 

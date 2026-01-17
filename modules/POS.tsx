@@ -61,7 +61,25 @@ const POS: React.FC<{ quickMode?: boolean }> = ({ quickMode = false }) => {
       isClinic: false
     };
 
+    // 1. Save Invoice
     await db.add('INVOICES', invoice);
+    
+    // 2. Deduct Inventory (Audit Fix)
+    // Matches service name to inventory item name
+    const inventory = await db.shared.getInventory();
+    let inventoryChanged = false;
+
+    cart.forEach(cartItem => {
+      const stockItemIndex = inventory.findIndex(i => i.name === cartItem.service.name);
+      if (stockItemIndex !== -1 && inventory[stockItemIndex].quantity > 0) {
+        inventory[stockItemIndex].quantity -= 1;
+        inventoryChanged = true;
+      }
+    });
+
+    if (inventoryChanged) {
+        await db.save('INVENTORY', inventory);
+    }
     
     if (selectedCustomer) {
       await db.update<Customer>('CUSTOMERS', selectedCustomer.id, {

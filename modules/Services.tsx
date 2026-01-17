@@ -14,7 +14,8 @@ const Services: React.FC = () => {
 
   const loadServices = async () => {
     const s = await db.get<Service>('SERVICES');
-    setServices(s);
+    // Ensure we only show active items (DB service filters this, but filtering here is safe)
+    setServices(s.filter(x => x.active !== false));
   };
 
   const handleSave = async (e: React.FormEvent) => {

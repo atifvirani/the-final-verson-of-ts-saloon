@@ -39,6 +39,7 @@ export interface Service {
   costPrice: number;
   commission: number; // percentage
   productsUsed: string[];
+  active?: boolean; // Soft delete flag
 }
 
 export interface Staff {
@@ -48,6 +49,7 @@ export interface Staff {
   role: string;
   commission: number;
   salary?: number;
+  active?: boolean; // Soft delete flag
 }
 
 export interface Customer {
@@ -114,5 +116,15 @@ export interface Expense {
   title: string;
   amount: number;
   date: number;
+  category: string;
+}
+
+export interface InventoryItem {
+  id: string;
+  name: string;
+  quantity: number;
+  unit: string;
+  minLevel: number;
+  price: number;
   category: string;
 }

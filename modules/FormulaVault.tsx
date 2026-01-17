@@ -112,16 +112,18 @@ const FormulaVault: React.FC = () => {
             <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
               
               {/* IMAGE LINK FIELD - FIX FOR CRASH */}
-              <div>
-                <label className="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Photo Reference (Google Drive Link)</label>
+              <div className="mb-4">
+                <label className="block text-gray-400 text-sm mb-2 font-bold">Reference Image (URL/Link)</label>
                 <input 
                   type="text" 
-                  placeholder="https://drive.google.com/..." 
+                  placeholder="Paste Google Drive / Dropbox Link here..." 
                   value={editFormula.imageLink || ''}
                   onChange={(e) => setEditFormula({...editFormula, imageLink: e.target.value})}
-                  className="w-full bg-black border border-white/10 text-white px-4 py-3 rounded-xl focus:border-gold outline-none"
+                  className="w-full bg-[#1a1a1a] border border-gray-700 rounded p-3 text-white focus:border-[#D4AF37] outline-none"
                 />
-                <p className="text-[10px] text-yellow-600 mt-2">⚠️ Desktop App not connected. Use Links only to avoid browser storage crash.</p>
+                <p className="text-xs text-yellow-600 mt-2">
+                  ⚠️ Note: For the Web Version, please use Drive links to keep the system fast.
+                </p>
               </div>
 
               <div>
