@@ -25,13 +25,13 @@ const STORAGE_KEYS = {
   
   // --- SHARED RESOURCES ---
   STAFF: 'ts_staff_data',
+  INVENTORY: 'ts_inventory_stock',
   EXPENSES: 'ts_expenses_data',
   SETTINGS: 'ts_settings_data',
   LOGS: 'ts_audit_logs'
 };
 
-// Legacy key mapping to ensure existing modules (Services, POS, etc.) continue to work
-// while routing data to the new strictly separated storage keys.
+// Legacy key mapping
 const LEGACY_KEYS = {
   SERVICES: STORAGE_KEYS.SALON_SERVICES,
   STAFF: STORAGE_KEYS.STAFF,
@@ -43,38 +43,56 @@ const LEGACY_KEYS = {
   CLINIC_CUSTOMERS: STORAGE_KEYS.CLINIC_CLIENTS,
   CLINIC_INVOICES: STORAGE_KEYS.CLINIC_INVOICES,
   CLINIC_RECORDS: STORAGE_KEYS.CLINIC_RECORDS,
-  LOGS: STORAGE_KEYS.LOGS
+  LOGS: STORAGE_KEYS.LOGS,
+  INVENTORY: STORAGE_KEYS.INVENTORY
 };
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const uuidv4 = () => crypto.randomUUID();
 
 export const db = {
-  // --- CORE GENERIC METHODS (Used by existing modules) ---
+  
+  // --- CORE GENERIC METHODS ---
   
   get: async <T>(key: keyof typeof LEGACY_KEYS): Promise<T[]> => {
-    await delay(50); // Fake DB latency
+    await delay(50); 
     const storageKey = LEGACY_KEYS[key] || key;
     const data = localStorage.getItem(storageKey);
-    return data ? JSON.parse(data) : [];
+    let list = data ? JSON.parse(data) : [];
+    
+    // Auto-filter inactive items for specific modules
+    if (['SERVICES', 'STAFF'].includes(key)) {
+        list = list.filter((item: any) => item.active !== false);
+    }
+    return list;
   },
 
   add: async <T>(key: keyof typeof LEGACY_KEYS, item: any): Promise<void> => {
     await delay(50);
+    
+    // Validation: Prevent Service Price < 0
+    if (key === 'SERVICES' && item.price < 0) {
+        throw new Error("Price cannot be negative");
+    }
+
     const storageKey = LEGACY_KEYS[key] || key;
-    // Retrieve using the storage key directly to ensure consistency
     const data = localStorage.getItem(storageKey);
     const list = data ? JSON.parse(data) : [];
     
     const newItem = { 
       ...item, 
       id: item.id || uuidv4(), 
+      active: true, // Default active state
       createdAt: new Date().toISOString() 
     };
-    list.unshift(newItem); // Add to top
+    list.unshift(newItem); 
     localStorage.setItem(storageKey, JSON.stringify(list));
     
-    // Log action
+    // Inventory Logic: Deduct stock when Invoice is generated
+    if (key === 'INVOICES') {
+        await db.handleInventoryDeduction(newItem);
+    }
+
     await db.log('ADD', key as string, newItem.id);
   },
 
@@ -92,15 +110,23 @@ export const db = {
     }
   },
 
+  // 🔴 SOFT DELETE IMPLEMENTATION
   delete: async (key: keyof typeof LEGACY_KEYS, id: string | number): Promise<void> => {
     await delay(50);
     const storageKey = LEGACY_KEYS[key] || key;
-    const data = localStorage.getItem(storageKey);
-    let list: any[] = data ? JSON.parse(data) : [];
     
-    list = list.filter(i => i.id != id);
-    localStorage.setItem(storageKey, JSON.stringify(list));
-    await db.log('DELETE', key as string, id);
+    if (['SERVICES', 'STAFF'].includes(key)) {
+        // Soft Delete
+        await db.update(key, id, { active: false });
+        await db.log('SOFT_DELETE', key as string, id);
+    } else {
+        // Hard Delete (for other items like logs or drafts)
+        const data = localStorage.getItem(storageKey);
+        let list: any[] = data ? JSON.parse(data) : [];
+        list = list.filter(i => i.id != id);
+        localStorage.setItem(storageKey, JSON.stringify(list));
+        await db.log('DELETE', key as string, id);
+    }
   },
 
   save: async <T>(key: keyof typeof LEGACY_KEYS, items: T[]): Promise<void> => {
@@ -110,7 +136,15 @@ export const db = {
     await db.log('SAVE', key as string, 'bulk');
   },
 
-  // --- SPECIFIC HELPERS (For explicit separation logic) ---
+  // --- LOGIC HELPERS ---
+
+  handleInventoryDeduction: async (invoice: Invoice) => {
+    // Placeholder for robust inventory logic
+    // In a real app, we would map services to products and deduct
+    await db.log('INVENTORY_ADJUST', 'INVENTORY', invoice.id);
+  },
+
+  // --- NAMESPACED ACCESSORS ---
   salon: {
     getClients: () => db.get<Client>('CUSTOMERS'),
     addClient: (c: any) => db.add('CUSTOMERS', c),
@@ -132,14 +166,12 @@ export const db = {
     },
   },
 
-  // --- SYSTEM UTILS ---
-
   getSettings: async (): Promise<any> => {
     const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
     return data ? JSON.parse(data) : {
       salonName: 'TS Salon & Aesthetics',
       currency: '₹',
-      taxRate: 18, // GST Default
+      taxRate: 18, 
       whatsappTemplate: 'Namaste {name}, thank you for visiting TS Salon. Your bill #{invoiceId} for {total} is ready.'
     };
   },
@@ -158,7 +190,6 @@ export const db = {
       module,
       targetId
     });
-    // Keep only last 1000 logs
     localStorage.setItem(STORAGE_KEYS.LOGS, JSON.stringify(logs.slice(-1000)));
   },
 
@@ -177,8 +208,6 @@ export const db = {
 
   importData: async (json: string): Promise<void> => {
     const data = JSON.parse(json);
-    // Logic to import based on STORAGE_KEYS structure
-    // This assumes the imported JSON matches the export structure
     for (const [key, value] of Object.entries(data)) {
         // @ts-ignore
        const storageKey = STORAGE_KEYS[key];
