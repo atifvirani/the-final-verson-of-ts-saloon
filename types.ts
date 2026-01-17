@@ -1,0 +1,108 @@
+
+export enum AppView {
+  DASHBOARD = 'dashboard',
+  SALON_FLOOR = 'salon-floor',
+  POS = 'pos',
+  QUICK_BILLING = 'quick-billing',
+  SERVICES = 'services',
+  INVOICES = 'invoices',
+  CUSTOMERS = 'customers',
+  PROFIT = 'profit',
+  REPORTS = 'reports',
+  STAFF = 'staff',
+  TABLET = 'tablet',
+  CLINIC = 'clinic',
+  FORMULAS = 'formulas',
+  SETTINGS = 'settings',
+  DEVELOPER = 'developer'
+}
+
+export enum ChairStatus {
+  IDLE = 'idle',
+  IN_SERVICE = 'in-service',
+  COMPLETED = 'completed'
+}
+
+export enum PaymentMode {
+  CASH = 'cash',
+  UPI = 'upi',
+  SPLIT = 'split'
+}
+
+export interface Service {
+  id: string;
+  name: string;
+  category: 'Hair' | 'Skin' | 'Makeup' | 'Clinical';
+  time: number; // minutes
+  price: number;
+  costPrice: number;
+  commission: number; // percentage
+  productsUsed: string[];
+}
+
+export interface Staff {
+  id: string;
+  name: string;
+  phone: string;
+  role: string;
+  commission: number;
+  salary?: number;
+}
+
+export interface Customer {
+  id: string;
+  name: string;
+  phone: string;
+  visitCount: number;
+  totalSpent: number;
+  isVIP: boolean;
+  notes?: string;
+  type: 'salon' | 'clinic';
+}
+
+export interface Chair {
+  id: number;
+  status: ChairStatus;
+  startTime?: number;
+  staffId?: string;
+  customerId?: string;
+  services: string[]; // Service IDs
+}
+
+export interface Invoice {
+  id: string;
+  date: number;
+  customerId: string;
+  customerName: string;
+  customerPhone: string;
+  services: Array<{
+    serviceId: string;
+    name: string;
+    price: number;
+    staffId: string;
+    staffName: string;
+  }>;
+  subtotal: number;
+  discount: number;
+  tax: number;
+  total: number;
+  paymentMode: PaymentMode;
+  isClinic: boolean;
+}
+
+export interface Formula {
+  id: string;
+  serviceId: string;
+  name: string;
+  steps: string[];
+  ingredients: Array<{ item: string; amount: string }>;
+  safetyNotes?: string;
+}
+
+export interface SystemSettings {
+  salonName: string;
+  logoUrl?: string;
+  currency: string;
+  taxRate: number;
+  whatsappTemplate: string;
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Elysian Salon & Aesthetic OS",
+  "description": "A high-end, desktop-grade salon management system featuring real-time chair tracking, automated billing, and clinical-grade record keeping.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
