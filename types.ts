@@ -98,6 +98,7 @@ export interface Formula {
   steps: string[];
   ingredients: Array<{ item: string; amount: string }>;
   safetyNotes?: string;
+  imageLink?: string; // Changed from file upload to link to prevent crashes
 }
 
 export interface SystemSettings {
@@ -106,4 +107,12 @@ export interface SystemSettings {
   currency: string;
   taxRate: number;
   whatsappTemplate: string;
+}
+
+export interface Expense {
+  id: string;
+  title: string;
+  amount: number;
+  date: number;
+  category: string;
 }

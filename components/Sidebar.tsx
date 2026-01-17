@@ -13,7 +13,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen }) 
   const menuItems = [
     { id: AppView.DASHBOARD, label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
     { id: AppView.SALON_FLOOR, label: 'Salon Floor', icon: 'M4 6h16M4 10h16M4 14h16M4 18h16' },
-    { id: AppView.POS, label: 'Billing / POS', icon: 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z' },
+    { id: AppView.POS, label: 'Billing / POS', icon: 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z' },
     { id: AppView.QUICK_BILLING, label: 'Quick Billing', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
     { id: AppView.SERVICES, label: 'Services', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
     { id: AppView.INVOICES, label: 'Invoices', icon: 'M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z' },
@@ -28,9 +28,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, isOpen }) 
 
   return (
     <aside className={`${isOpen ? 'w-64' : 'w-0'} bg-[#1a1a1a] flex flex-col transition-all duration-300 overflow-hidden border-r border-white/5`}>
-      <div className="p-8 pb-4">
-        <h1 className="luxury-font text-2xl tracking-tighter text-gold">TS SALON</h1>
-        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 mt-1">Aesthetics & Clinic</p>
+      <div className="p-6 text-center border-b border-gray-800">
+        <h1 className="text-2xl font-bold text-[#D4AF37] tracking-wider luxury-font">TS SALON</h1>
+        <p className="text-xs text-gray-500 uppercase tracking-widest mt-1">Clinical Aesthetics</p>
       </div>
       
       <nav className="flex-1 overflow-y-auto mt-4 px-4 space-y-1 custom-scrollbar">

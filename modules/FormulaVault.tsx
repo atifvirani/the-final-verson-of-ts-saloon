@@ -12,7 +12,8 @@ const FormulaVault: React.FC = () => {
   // Editor state
   const [editFormula, setEditFormula] = useState<Partial<Formula>>({
     steps: [''],
-    ingredients: [{ item: '', amount: '' }]
+    ingredients: [{ item: '', amount: '' }],
+    imageLink: ''
   });
 
   useEffect(() => {
@@ -29,12 +30,13 @@ const FormulaVault: React.FC = () => {
     if (!selectedServiceId) return;
 
     const newFormula: Formula = {
-      id: activeFormula?.id || Date.now().toString(),
+      id: activeFormula?.id || crypto.randomUUID(),
       serviceId: selectedServiceId,
       name: services.find(s => s.id === selectedServiceId)?.name || 'Unknown',
       steps: editFormula.steps?.filter(s => s) || [],
       ingredients: editFormula.ingredients?.filter(i => i.item) || [],
-      safetyNotes: editFormula.safetyNotes || ''
+      safetyNotes: editFormula.safetyNotes || '',
+      imageLink: editFormula.imageLink || ''
     };
 
     if (activeFormula) {
@@ -51,7 +53,12 @@ const FormulaVault: React.FC = () => {
     if (activeFormula) {
       setEditFormula(JSON.parse(JSON.stringify(activeFormula)));
     } else {
-      setEditFormula({ steps: [''], ingredients: [{ item: '', amount: '' }], safetyNotes: '' });
+      setEditFormula({ 
+        steps: [''], 
+        ingredients: [{ item: '', amount: '' }], 
+        safetyNotes: '',
+        imageLink: ''
+      });
     }
     setIsEditing(true);
   };
@@ -73,7 +80,7 @@ const FormulaVault: React.FC = () => {
                 onClick={() => { setSelectedServiceId(svc.id); setIsEditing(false); }}
                 className={`w-full text-left p-4 rounded-xl mb-1 transition-all flex items-center justify-between ${
                   selectedServiceId === svc.id 
-                    ? 'bg-amber-600/20 text-amber-500 border border-amber-500/30' 
+                    ? 'bg-amber-600/20 text-gold border border-gold/30' 
                     : 'text-gray-400 hover:bg-white/5'
                 }`}
               >
@@ -96,13 +103,27 @@ const FormulaVault: React.FC = () => {
           // Editor Mode
           <div className="flex-1 flex flex-col">
             <div className="p-6 border-b border-white/5 flex justify-between items-center bg-amber-900/10">
-              <h3 className="text-lg font-bold text-amber-500">Editing Formula: {services.find(s => s.id === selectedServiceId)?.name}</h3>
+              <h3 className="text-lg font-bold text-gold">Editing Formula: {services.find(s => s.id === selectedServiceId)?.name}</h3>
               <div className="flex gap-2">
                 <button onClick={() => setIsEditing(false)} className="px-4 py-2 text-xs font-bold text-gray-400 hover:text-white">Cancel</button>
-                <button onClick={handleSave} className="px-4 py-2 text-xs font-bold bg-amber-600 text-white rounded-lg hover:bg-amber-500">Save Changes</button>
+                <button onClick={handleSave} className="px-4 py-2 text-xs font-bold bg-gold text-black rounded-lg hover:bg-yellow-600">Save Changes</button>
               </div>
             </div>
             <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+              
+              {/* IMAGE LINK FIELD - FIX FOR CRASH */}
+              <div>
+                <label className="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Photo Reference (Google Drive Link)</label>
+                <input 
+                  type="text" 
+                  placeholder="https://drive.google.com/..." 
+                  value={editFormula.imageLink || ''}
+                  onChange={(e) => setEditFormula({...editFormula, imageLink: e.target.value})}
+                  className="w-full bg-black border border-white/10 text-white px-4 py-3 rounded-xl focus:border-gold outline-none"
+                />
+                <p className="text-[10px] text-yellow-600 mt-2">⚠️ Desktop App not connected. Use Links only to avoid browser storage crash.</p>
+              </div>
+
               <div>
                 <label className="block text-xs text-gray-500 uppercase font-black tracking-widest mb-3">Ingredients</label>
                 {editFormula.ingredients?.map((ing, i) => (
@@ -115,7 +136,7 @@ const FormulaVault: React.FC = () => {
                         newIngs[i].item = e.target.value;
                         setEditFormula({...editFormula, ingredients: newIngs});
                       }}
-                      className="flex-1 bg-black border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-amber-500 outline-none"
+                      className="flex-1 bg-black border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-gold outline-none"
                     />
                     <input 
                       placeholder="Amount (e.g. 50ml)"
@@ -125,13 +146,13 @@ const FormulaVault: React.FC = () => {
                         newIngs[i].amount = e.target.value;
                         setEditFormula({...editFormula, ingredients: newIngs});
                       }}
-                      className="w-32 bg-black border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-amber-500 outline-none"
+                      className="w-32 bg-black border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-gold outline-none"
                     />
                   </div>
                 ))}
                 <button 
                   onClick={() => setEditFormula({...editFormula, ingredients: [...(editFormula.ingredients || []), {item: '', amount: ''}]})}
-                  className="mt-2 text-xs text-amber-500 hover:underline font-bold"
+                  className="mt-2 text-xs text-gold hover:underline font-bold"
                 >
                   + Add Ingredient
                 </button>
@@ -149,13 +170,13 @@ const FormulaVault: React.FC = () => {
                         newSteps[i] = e.target.value;
                         setEditFormula({...editFormula, steps: newSteps});
                       }}
-                      className="flex-1 bg-black border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-amber-500 outline-none"
+                      className="flex-1 bg-black border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-gold outline-none"
                     />
                   </div>
                 ))}
                 <button 
                   onClick={() => setEditFormula({...editFormula, steps: [...(editFormula.steps || []), '']})}
-                  className="mt-2 text-xs text-amber-500 hover:underline font-bold"
+                  className="mt-2 text-xs text-gold hover:underline font-bold"
                 >
                   + Add Step
                 </button>
@@ -167,7 +188,7 @@ const FormulaVault: React.FC = () => {
                   value={editFormula.safetyNotes}
                   onChange={e => setEditFormula({...editFormula, safetyNotes: e.target.value})}
                   rows={4}
-                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-amber-500 outline-none"
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-gold outline-none"
                 />
               </div>
             </div>
@@ -193,9 +214,19 @@ const FormulaVault: React.FC = () => {
 
             {activeFormula ? (
               <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+                
+                {activeFormula.imageLink && (
+                  <div className="mb-6">
+                     <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-2">Reference Image</div>
+                     <a href={activeFormula.imageLink} target="_blank" rel="noopener noreferrer" className="text-gold underline text-sm truncate block bg-white/5 p-3 rounded-lg border border-white/5 hover:border-gold">
+                       {activeFormula.imageLink}
+                     </a>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-8">
                   <div className="bg-black/40 border border-white/5 rounded-2xl p-6">
-                    <h4 className="text-amber-500 font-bold mb-4 flex items-center gap-2">
+                    <h4 className="text-gold font-bold mb-4 flex items-center gap-2">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                       Ingredients / Mix
                     </h4>
@@ -239,7 +270,7 @@ const FormulaVault: React.FC = () => {
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-gray-500">
                 <p>No formula recorded for this service.</p>
-                <button onClick={startEdit} className="text-amber-500 hover:underline mt-2 text-sm">Create one now</button>
+                <button onClick={startEdit} className="text-gold hover:underline mt-2 text-sm">Create one now</button>
               </div>
             )}
           </div>
